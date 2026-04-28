@@ -1,32 +1,163 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Dashboard</title>
+    <style>
+        /* The "Variables" for our color scheme */
+        :root {
+            --primary: #4F46E5; /* Indigo Accent */
+            --bg: #F3F4F6;      /* Light Gray Background */
+            --surface: #FFFFFF; /* White Card */
+            --text: #111827;    /* Dark Text */
+            --border: #E5E7EB;  /* Soft Borders */
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            background: var(--surface);
+            width: 100%;
+            max-width: 900px;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: var(--primary);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 15px;
+            font-size: 24px;
+        }
+
+        /* Form Layout */
+        form { 
+            display: flex; 
+            gap: 10px; 
+            margin-bottom: 25px; 
+            flex-wrap: wrap; 
+        }
+
+        input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+        }
+
+        /* Button Styling */
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover { background-color: #4338CA; transform: translateY(-1px); }
+
+        .controls { display: flex; gap: 10px; margin-bottom: 20px; }
+        .controls button { background-color: #374151; }
+        .controls button:hover { background-color: #1F2937; }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th { 
+            background-color: #F9FAFB; 
+            color: #4B5563; 
+            font-weight: 600; 
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.05em;
+        }
+
+        tr:hover { background-color: #F9FAFB; }
+        
+        /* Status Badge */
+        .status-badge {
+            background: #DEF7EC;
+            color: #03543F;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+    </style>
+</head>
 <body>
-    <h2>Live Database Orders</h2>
-    
-    <form action="/add-order" method="POST">
-        <input type="text" name="orderId" placeholder="Order ID" required>
-        <input type="text" name="customerName" placeholder="Customer Name" required>
-        <input type="text" name="restaurant" placeholder="Restaurant" required>
-        <input type="number" step="0.01" name="amount" placeholder="Amount" required>
-        <input type="text" name="status" placeholder="Status" required>
-        <button type="submit">Add Order</button>
-    </form>
-    
-    <br><hr><br>
-    <div style="margin-bottom: 20px;">
-        <a href="/"><button>📋 Show All</button></a>
-        <a href="/sort"><button>↕️ Sort by Amount</button></a>
-        <a href="/premium"><button>💎 Premium Orders (>₹1000)</button></a>
+    <div class="container">
+        <h2>🚀 Live Order Dashboard</h2>
+        
+        <form action="/add-order" method="POST">
+            <input type="text" name="orderId" placeholder="Order ID" required>
+            <input type="text" name="customerName" placeholder="Customer" required>
+            <input type="text" name="restaurant" placeholder="Restaurant" required>
+            <input type="number" step="0.01" name="amount" placeholder="Amount (₹)" required>
+            <input type="text" name="status" placeholder="Status" required>
+            <button type="submit">+ Add Order</button>
+        </form>
+        
+        <div class="controls">
+            <a href="/"><button>📋 Show All</button></a>
+            <a href="/sort"><button>↕️ Sort by Price</button></a>
+            <a href="/premium"><button>💎 Premium (>₹1000)</button></a>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Customer</th>
+                    <th>Restaurant</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="order : ${orders}">
+                    <td th:text="${order.orderId}"></td>
+                    <td th:text="${order.customerName}"></td>
+                    <td th:text="${order.restaurant}"></td>
+                    <td th:text="'₹' + ${order.amount}"></td>
+                    <td><span class="status-badge" th:text="${order.status}"></span></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-    <table border="1">
-        <tr><th>ID</th><th>Customer</th><th>Restaurant</th><th>Amount</th><th>Status</th></tr>
-        <tr th:each="order : ${orders}">
-            <td th:text="${order.orderId}"></td>
-            <td th:text="${order.customerName}"></td>
-            <td th:text="${order.restaurant}"></td>
-            <td th:text="${order.amount}"></td>
-            <td th:text="${order.status}"></td>
-        </tr>
-    </table>
 </body>
 </html>
