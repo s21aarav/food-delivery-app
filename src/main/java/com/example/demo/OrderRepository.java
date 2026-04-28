@@ -26,4 +26,8 @@ public interface OrderRepository extends CrudRepository<FoodOrder, String> {
     // Filter Premium Orders (> 1000)
     @Query("SELECT * FROM orders WHERE amount > 1000")
     List<FoodOrder> findPremiumOrders();
+
+    // Sort by ID Ascending
+    @Query("SELECT * FROM orders ORDER BY order_id ASC")
+    List<FoodOrder> findAllSortedById();
 }

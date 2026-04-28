@@ -41,4 +41,17 @@ public class FoodOrderController {
         model.addAttribute("orders", repository.findPremiumOrders());
         return "index";
     }
+
+    @GetMapping("/sort-id")
+    public String sortById(Model model) {
+        model.addAttribute("orders", repository.findAllSortedById());
+        return "index";
+    }
+
+    // We use PostMapping for deleting because it changes data (safer than GetMapping)
+    @PostMapping("/clear-all")
+    public String clearAll() {
+        repository.deleteAll();
+        return "redirect:/";
+    }
 }

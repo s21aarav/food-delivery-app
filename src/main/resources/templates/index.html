@@ -132,10 +132,17 @@
             <button type="submit">+ Add Order</button>
         </form>
         
-        <div class="controls">
+        <div class="controls" style="display: flex; gap: 10px; margin-bottom: 20px; align-items: center; flex-wrap: wrap;">
             <a href="/"><button>📋 Show All</button></a>
+            <a href="/sort-id"><button>🔢 Sort by ID</button></a>
             <a href="/sort"><button>↕️ Sort by Price</button></a>
             <a href="/premium"><button>💎 Premium (>₹1000)</button></a>
+            
+            <form action="/clear-all" method="POST" style="margin: 0; margin-left: auto;">
+                <button type="submit" style="background-color: #DC2626; box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.4);">
+                    🗑️ Clear Data
+                </button>
+            </form>
         </div>
 
         <table>
